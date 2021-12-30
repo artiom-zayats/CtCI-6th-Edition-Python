@@ -3,6 +3,16 @@ import unittest
 from collections import defaultdict
 
 
+
+def mysol(string:str):
+    seen = set()
+    for x in string:
+        if x in seen:
+            return False
+        seen.add(x)
+    return True
+
+
 def is_unique_chars_algorithmic(string):
     # Assuming character set is ASCII (128 characters)
     if len(string) > 128:
@@ -80,6 +90,7 @@ class Test(unittest.TestCase):
         ("".join([chr(val // 2) for val in range(129)]), False),  # non-unique 129 chars
     ]
     test_functions = [
+        mysol,
         is_unique_chars_pythonic,
         is_unique_chars_algorithmic,
         is_unique_bit_vector,
@@ -96,9 +107,7 @@ class Test(unittest.TestCase):
             for text, expected in self.test_cases:
                 for is_unique_chars in self.test_functions:
                     start = time.perf_counter()
-                    assert (
-                        is_unique_chars(text) == expected
-                    ), f"{is_unique_chars.__name__} failed for value: {text}"
+                    assert (is_unique_chars(text) == expected), f"{is_unique_chars.__name__} failed for value: {text}"
                     function_runtimes[is_unique_chars.__name__] += (
                         time.perf_counter() - start
                     ) * 1000
