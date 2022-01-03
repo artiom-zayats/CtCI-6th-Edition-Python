@@ -2,6 +2,29 @@
 import time
 import unittest
 
+def mysol(s1,s2):
+    if abs(len(s1)-len(s2)) > 1:
+        return False
+    edit = False
+    i,j = 0,0
+
+    while i < len(s1) and j < len(s2):
+        if s1[i] == s2[j]:
+            i+=1
+            j+=1
+        elif not edit:
+            edit = True
+            if len(s1) == len(s2):
+                i+=1
+                j+=1
+                
+            elif len(s1) < len(s2):
+                j+=1
+            else:
+                i+=1
+        else:
+            return False
+    return True
 
 def are_one_edit_different(s1, s2):
     """Check if a string can converted to another string with a single edit"""
@@ -70,7 +93,7 @@ class Test(unittest.TestCase):
         ("ale", "elas", False),
     ]
 
-    testable_functions = [are_one_edit_different]
+    testable_functions = [mysol,are_one_edit_different]
 
     def test_one_away(self):
 

@@ -2,6 +2,24 @@
 import unittest
 from collections import Counter
 
+def mysol(phrase):
+    
+    counter = {}
+    for x in phrase:
+        x = x.lower()
+        if x != " ":
+            if x not in counter:
+                counter[x] = 0
+            counter[x] += 1
+
+    odd = False
+    for k,v in counter.items():
+        if v%2 != 0:
+            if odd:
+                return False
+            else:
+                odd = True
+    return True
 
 def is_palindrome_permutation(phrase):
     """checks if a string is a permutation of a palindrome"""
@@ -56,7 +74,7 @@ class Test(unittest.TestCase):
         ("no x in nixon", True),
         ("azAZ", True),
     ]
-    testable_functions = [is_palindrome_permutation, is_palindrome_permutation_pythonic]
+    testable_functions = [mysol,is_palindrome_permutation, is_palindrome_permutation_pythonic]
 
     def test_pal_perm(self):
         for f in self.testable_functions:

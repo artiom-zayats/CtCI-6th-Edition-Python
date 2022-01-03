@@ -2,6 +2,8 @@
 import unittest
 
 
+
+
 def urlify_algo(string, length):
     """replace spaces with %20 and removes trailing spaces"""
     # convert to list because Python strings are immutable
@@ -34,14 +36,18 @@ class Test(unittest.TestCase):
         ("Mr John Smith       ", 13): "Mr%20John%20Smith",
         (" a b    ", 4): "%20a%20b",
         (" a b       ", 5): "%20a%20b%20",
+        ("a", 1): "a",
     }
-    testable_functions = [urlify_algo, urlify_pythonic]
+    testable_functions = [
+        urlify_algo, 
+        urlify_pythonic
+        ]
 
     def test_urlify(self):
         for urlify in self.testable_functions:
             for args, expected in self.test_cases.items():
                 actual = urlify(*args)
-                assert actual == expected, f"Failed {urlify.__name__} for: {[*args]}"
+                assert actual == expected, f"Failed {urlify.__name__} for: {[*args]}, With:  {actual} != {expected}"
 
 
 if __name__ == "__main__":

@@ -2,6 +2,32 @@ import time
 import unittest
 
 
+def mysol(string):
+    if not string:
+        return string
+
+    compressed = ""
+
+    char = string[0]
+    count = 1
+    for i in range(1,len(string)):
+        x = string[i]
+        if x == char:
+            count+=1
+        else:
+            compressed += char + str(count)
+            count = 1
+            char = x
+    compressed += char + str(count)
+    print(string,compressed)
+    if len(compressed) >= len(string):
+        return string
+    return compressed
+
+
+
+
+
 def compress_string(string):
     compressed = []
     counter = 0
@@ -29,7 +55,7 @@ class Test(unittest.TestCase):
         ("a", "a"),
         ("", ""),
     ]
-    testable_functions = [
+    testable_functions = [mysol,
         compress_string,
     ]
 
