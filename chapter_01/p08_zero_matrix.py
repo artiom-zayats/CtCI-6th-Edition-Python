@@ -1,6 +1,45 @@
 # O(MxN)
 import unittest
-from copy import deepcopy
+from copy import copy, deepcopy
+
+
+def mysol(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    ans = deepcopy(matrix)
+
+    for row in range(rows):
+        for col in range(cols):
+            if matrix[row][col] == 0:
+                #zero col
+                for i in range(rows):
+                    ans[i][col] = 0
+                for i in range(cols):
+                    ans[row][i] = 0
+    return ans
+
+
+def mysol2(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    for row in range(rows):
+        for col in range(cols):
+            if matrix[row][col] == 0:
+                #zero col
+                for i in range(rows):
+                    if matrix[i][col] != 0:
+                        matrix[i][col] = None
+                for i in range(cols):
+                    if matrix[row][i] != 0:
+                        matrix[row][i] = None
+
+    for row in range(rows):
+        for col in range(cols):
+            if matrix[row][col] == None:
+                matrix[row][col] = 0
+    return matrix
 
 
 def zero_matrix(matrix):
@@ -54,7 +93,7 @@ class Test(unittest.TestCase):
             ],
         )
     ]
-    testable_functions = [zero_matrix, zero_matrix_pythonic]
+    testable_functions = [mysol,mysol2,zero_matrix, zero_matrix_pythonic]
 
     def test_zero_matrix(self):
         for f in self.testable_functions:
