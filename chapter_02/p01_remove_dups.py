@@ -1,7 +1,43 @@
 import time
+import unittest
+from unittest import runner
 
-from chapter_02.linked_list import LinkedList
+from linked_list import LinkedList
 
+
+def mysol(ll):
+    seen = set()
+    cur = ll.head
+    prev = None
+    while cur:
+        if cur.value not in seen:
+            seen.add(cur.value)
+            prev = cur
+        else:
+            prev.next = cur.next
+        cur = cur.next
+    ll.tail = prev
+    return ll
+
+
+def mysol2(ll):
+    cur = ll.head
+    run = ll.head
+
+    while cur:
+        run = cur
+        while run.next:
+            if cur.value == run.next.value:
+                run.next = run.next.next
+            else:
+                run = run.next
+        cur = cur.next
+
+    ll.tail = run
+    return ll
+
+
+    
 
 def remove_dups(ll):
     current = ll.head
@@ -33,45 +69,38 @@ def remove_dups_followup(ll):
     return ll
 
 
-testable_functions = (remove_dups, remove_dups_followup)
-test_cases = (
-    ([], []),
-    ([1, 1, 1, 1, 1, 1], [1]),
-    ([1, 2, 3, 2], [1, 2, 3]),
-    ([1, 2, 2, 3], [1, 2, 3]),
-    ([1, 1, 2, 3], [1, 2, 3]),
-    ([1, 2, 3], [1, 2, 3]),
-)
+class Test(unittest.TestCase):
 
 
-def test_remove_dupes():
-    for f in testable_functions:
-        start = time.perf_counter()
-        for _ in range(100):
-            for values, expected in test_cases:
-                expected = expected.copy()
-                deduped = f(LinkedList(values))
-                assert deduped.values() == expected
-
-                deduped.add(5)
-                expected.append(5)
-                assert deduped.values() == expected
-
-        duration = time.perf_counter() - start
-        print(f"{f.__name__} {duration * 1000:.1f}ms")
+    testable_functions = [mysol,mysol2,remove_dups,remove_dups_followup]
+    test_cases = (
+        ([], []),
+        ([1, 1, 1, 1, 1, 1], [1]),
+        ([1, 2, 3, 2], [1, 2, 3]),
+        ([1, 2, 2, 3], [1, 2, 3]),
+        ([1, 1, 2, 3], [1, 2, 3]),
+        ([1, 2, 3], [1, 2, 3]),
+    )
 
 
-def example():
-    ll = LinkedList.generate(100, 0, 9)
-    print(ll)
-    remove_dups(ll)
-    print(ll)
+    def test_remove_dupes(self):
+        for f in self.testable_functions:
+            start = time.perf_counter()
+            for _ in range(100):
+                for [values, expected] in self.test_cases:
+                    expected = expected.copy()
+                    deduped = f(LinkedList(values))
+                    assert deduped.values() == expected
 
-    ll = LinkedList.generate(100, 0, 9)
-    print(ll)
-    remove_dups_followup(ll)
-    print(ll)
+                    deduped.add(5)
+                    expected.append(5)
+                    assert deduped.values() == expected
+
+            duration = time.perf_counter() - start
+            print(f"{f.__name__} {duration * 1000:.1f}ms")
+
+
 
 
 if __name__ == "__main__":
-    example()
+    unittest.main()
