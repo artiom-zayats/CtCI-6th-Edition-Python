@@ -1,13 +1,11 @@
 import unittest
 
-
+"""
 class Node:
     def __init__(self, value):
         self.value = value
         self.above = None
         self.below = None
-
-
 class Stack:
     def __init__(self, capacity):
         self.capacity = capacity
@@ -53,9 +51,7 @@ class Stack:
             self.bottom.below = None
         self.size -= 1
         return b.value
-
-
-class SetOfStacks:
+class SetOfStacks2:
     def __init__(self, capacity):
         self.capacity = capacity
         self.stacks = []
@@ -99,17 +95,65 @@ class SetOfStacks:
             v = self.left_shift(index + 1, False)
             stack.push(v)
         return removed_item
+"""
+
+
+
+
+class SetOfStacks:
+
+    def __init__(self,capacity):
+        self.stacks = []
+        self.capacity = capacity
+        self.c = 0
+
+    def push(self,val):
+        if self.c < self.capacity:
+            if not self.stacks:
+                self.stacks.append([])
+        else:
+            self.c = 0
+            self.stacks.append([])
+
+        self.stacks[-1].append(val)
+        self.c += 1
+
+
+    def pop(self):
+        if not self.stacks:
+            return None
+
+        if not self.stacks[-1]:
+            self.stacks.pop()
+        
+        val = self.stacks[-1].pop()
+        self.c -=1
+
+        if self.c == 0:
+            self.stacks.pop()
+        return val
+
+    def pop_at(self,index):
+        print(self.stacks)
+        if self.stacks and self.stacks[index]:
+            val = self.stacks[index]
+            if index == len(self.stacks)-1:
+                self.c -=1
+            return val
+        return None
+        
 
 
 class Tests(unittest.TestCase):
     def test_stacks(self):
+        val = 20
         stacks = SetOfStacks(5)
-        for i in range(35):
+        for i in range(val):
             stacks.push(i)
         lst = []
-        for _ in range(35):
+        for _ in range(val):
             lst.append(stacks.pop())
-        assert lst == list(reversed(range(35)))
+        assert lst == list(reversed(range(val)))
 
     def test_pop_at(self):
         stacks = SetOfStacks(5)

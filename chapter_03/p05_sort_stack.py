@@ -1,23 +1,53 @@
 # 3.5 Sort Stacks
+import re
 import unittest
 
-from chapter_03.stack import Stack
+from stack import Stack
+
 
 
 class SortedStack(Stack):
     def __init__(self):
-        super().__init__()
-        self.temp_stack = Stack()
+        self.stack = []
+        self.temp = []
+    def push(self,item):
 
-    def push(self, item):
-        if self.is_empty() or item < self.peek():
-            super().push(item)
+        if not self.stack:
+            self.stack.append(item)
+
         else:
-            while self.peek() is not None and item > self.peek():
-                self.temp_stack.push(self.pop())
-            super().push(item)
-            while not self.temp_stack.is_empty():
-                super().push(self.temp_stack.pop())
+            if self.stack[-1]>= item:
+                self.stack.append(item)
+            else:
+                while self.stack:
+                    if self.stack[-1] <= item:
+                        self.temp.append(self.stack.pop())
+                    else:
+                        self.temp.append(item)
+                        item = None
+                if item:
+                    self.temp.append(item)
+                while self.temp:
+                    self.stack.append(self.temp.pop())
+
+
+    def peek(self):
+        if self.stack:
+            return self.stack[-1]
+        else:
+            return None
+
+    def pop(self):
+        if self.stack:
+            return self.stack.pop()
+        else:
+            return None
+
+    def is_empty(self):
+        pass
+
+    def __len__(self):
+        return len(self.stack)
 
 
 class Tests(unittest.TestCase):
@@ -70,3 +100,7 @@ class Tests(unittest.TestCase):
         assert queue.pop() == 2
         assert queue.pop() == 3
         assert queue.pop() == 4
+
+
+if __name__ == "__main__":
+    unittest.main()

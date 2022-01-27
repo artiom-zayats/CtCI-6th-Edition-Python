@@ -1,43 +1,60 @@
 # 3.4 Queue Via Stacks
 import unittest
-
-from chapter_03.stack import Stack
+from stack import Stack
 
 
 class MyQueue:
     def __init__(self):
-        self.new_stack = Stack()
-        self.old_stack = Stack()
+        self.stack1 = []
+        self.stack2 = []
 
-    def _shift_stacks(self):
-        if self.old_stack.is_empty():
-            while not self.new_stack.is_empty():
-                self.old_stack.push(self.new_stack.pop())
+    def _move(self):
+        if not self.stack2:
+            while self.stack1:
+                self.stack2.append(self.stack1.pop())
+
 
     def add(self, value):
-        return self.new_stack.push(value)
+        if not self.stack2:
+            while self.stack1:
+                self.stack2.append(self.stack1.pop())
+        self.stack1.append(value)
 
     def peek(self):
-        if self.is_empty():
-            return False
-        self._shift_stacks()
-        return self.old_stack.peek()
+        self._move()
+        if self.stack2:
+            return self.stack2[-1]
+        return None
+
 
     def remove(self):
-        if self.is_empty():
-            return False
-        self._shift_stacks()
-        return self.old_stack.pop()
+        self._move()
+        if self.stack2:
+            return self.stack2.pop()
+        return None
 
     def is_empty(self):
-        return len(self) == 0
+        if len(self.stack1) == 0 and len(self.stack2) == 0:
+            return True
+        return False
+
 
     def __len__(self):
-        return len(self.new_stack) + len(self.old_stack)
+        return len(self.stack1) + len(self.stack2)
+
+
+
+
+
+
+
+
+
+
 
 
 class Tests(unittest.TestCase):
-    test_cases = [([1, 2, 3]), ([-1, 0, 1]), (["a", "b", "c", "d", "e", "f"])]
+    test_cases = [([1,2,3,4,5,6])]
 
     def test_size(self):
         for sequence in self.test_cases:
@@ -56,19 +73,6 @@ class Tests(unittest.TestCase):
                 q.add(val)
             assert q.peek() == sequence[0]
             assert len(q) == len(sequence)
-
-    def test_shift_stacks(self):
-        for sequence in self.test_cases:
-            q = MyQueue()
-            for val in sequence:
-                q.add(val)
-            assert len(q.old_stack) == 0
-            assert len(q.new_stack) == len(sequence)
-            assert q.new_stack.peek() == sequence[-1]
-            q._shift_stacks()
-            assert len(q.old_stack) == len(sequence)
-            assert len(q.new_stack) == 0
-            assert q.old_stack.peek() == sequence[0]
 
     def test_peek(self):
         for sequence in self.test_cases:
@@ -110,3 +114,7 @@ class Tests(unittest.TestCase):
         assert q.remove() == 6
         assert len(q) == 0
         assert not q.remove()
+        
+
+if __name__ == "__main__":
+    unittest.main()

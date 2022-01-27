@@ -1,7 +1,7 @@
-from chapter_03.stack import Stack
+from stack import Stack
 
 
-class MinStack(Stack):
+class MinStack2(Stack):
     def __init__(self):
         super().__init__()
         self.minvals = Stack()
@@ -19,6 +19,32 @@ class MinStack(Stack):
 
     def minimum(self):
         return self.minvals.peek()
+
+
+class MinStack():
+
+    def __init__(self):
+        self.stack = []
+    
+    def push(self,val):
+        if self.stack:
+            new_min = min(self.stack[-1][1],val)
+        else:
+            new_min = val
+        self.stack.append([val,new_min])
+
+    def pop(self):
+        if self.stack:
+            val,_ = self.stack.pop()
+            return val
+        return None
+
+    def minimum(self):
+        if self.stack:
+            mn = self.stack[-1][1]
+            return mn
+        return None
+
 
 
 def test_min_stack():
@@ -51,6 +77,8 @@ def test_min_stack():
 
     newstack.push(1)
     assert newstack.minimum() == 1
+
+    print("Done")
 
 
 if __name__ == "__main__":
