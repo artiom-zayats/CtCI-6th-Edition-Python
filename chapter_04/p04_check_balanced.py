@@ -9,8 +9,8 @@ class BinaryNode:
 # Traverse the tree and track the largest and smallest depth of each leaf node.
 # Then compare the largest and smallest depth.
 def is_balanced_v2(node):
-    min_depth = 10 ** 100
-    max_depth = -(10 ** 100)
+    min_depth = float("inf")
+    max_depth = float("-inf")
     queue = [(node, 0)]
     visited = [node]
 
@@ -61,7 +61,23 @@ def find_min_depth(node, level=0):
 # Find the max tree depth and min tree depth independently.
 # Then compare their values.
 def is_balanced_v1(node):
-    return find_max_depth(node) - find_min_depth(node) < 2
+    mx = find_max_depth(node,0)
+    mn = find_min_depth(node,0)
+    return mx - mn < 2
+
+
+def my_sol(node):
+
+    def _balanced(node):
+        if not node:
+            return True,0
+        lb,lh = _balanced(node.left)
+        rb,rh = _balanced(node.right)
+        if lb and rb and abs(lh-rh) < 2:
+            return True,max(lh,rh)+1
+        else:
+            return False,None
+    return _balanced(node)[0]
 
 
 def _gen_balanced_1():
@@ -118,7 +134,7 @@ test_cases = [
     (_gen_unbalanced_2, False),
 ]
 
-testable_functions = [is_balanced_v1, is_balanced_v2]
+testable_functions = [is_balanced_v1,is_balanced_v2,my_sol]
 
 
 def test_is_balanced():
@@ -130,3 +146,4 @@ def test_is_balanced():
 
 if __name__ == "__main__":
     test_is_balanced()
+    print("Done")

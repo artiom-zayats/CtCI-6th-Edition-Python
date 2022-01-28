@@ -19,13 +19,16 @@ from collections import deque
 
 
 def is_route(graph, start, end, visited=None):
-    if visited is None:
-        visited = set()
-    for node in graph[start]:
-        if node not in visited:
-            visited.add(node)
-            if node == end or is_route(graph, node, end, visited):
-                return True
+    visited = set()
+    stack = [start]
+    while stack:
+        el = stack.pop()
+        if el == end:
+            return True
+        for ch in graph[el]:
+            if ch not in visited:
+                visited.add(ch)
+                stack.append(ch)
     return False
 
 
@@ -45,6 +48,7 @@ def is_route_bfs(graph, start, end):
                     queue.append(adjacent)
         visited.add(node)
     return False
+
 
 
 class Test(unittest.TestCase):

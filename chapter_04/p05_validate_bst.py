@@ -16,6 +16,9 @@ def _is_bst(node, min_val=None, max_val=None):
     )
 
 
+
+
+
 def test_is_binary_search_tree():
     bst = BinarySearchTree()
     bst.insert(20)

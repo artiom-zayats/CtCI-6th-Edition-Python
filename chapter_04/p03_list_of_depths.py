@@ -1,5 +1,4 @@
 from collections import deque
-
 from chapter_02.linked_list import LinkedList
 
 
@@ -52,7 +51,35 @@ def create_node_list_by_depth_b(tree):
     return result
 
 
-testable_functions = [create_node_list_by_depth, create_node_list_by_depth_b]
+def my_sol(tree):
+    lists = []
+    parents = deque([tree])
+    children = deque()
+    temp = LinkedList()
+    while parents:
+        node = parents.popleft()
+        temp.add(node)
+        if node.left:
+            children.append(node.left)
+        if node.right:
+            children.append(node.right)
+        
+        if not parents:
+            parents = children
+            children = deque()
+            lists.append(temp)
+            temp = LinkedList()
+
+    return lists
+
+
+
+
+
+
+
+
+testable_functions = [create_node_list_by_depth, create_node_list_by_depth_b,my_sol]
 
 
 def test_create_node_list_by_depth():
@@ -66,6 +93,7 @@ def test_create_node_list_by_depth():
         node_b = BinaryNode("B", node_d, node_e)
         node_a = BinaryNode("A", node_b, node_c)
         lists = f(node_a)
+        print(lists)
 
         assert lists[0].values() == LinkedList([node_a]).values()
         assert lists[1].values() == LinkedList([node_b, node_c]).values()
@@ -88,3 +116,5 @@ def example():
 
 if __name__ == "__main__":
     example()
+    test_create_node_list_by_depth()
+    print("Done")

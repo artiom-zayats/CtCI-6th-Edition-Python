@@ -19,6 +19,31 @@ def in_order_successor(input_node):
     return ancestor
 
 
+
+def my_sol(node):
+    if not node:
+        return None
+
+    if node.right:
+        pos = node.right
+        while pos.left:
+            pos = pos.left
+        return pos
+
+    if node.parent:
+        child = node
+        parent = node.parent
+        while parent and parent.right == child:
+            child = parent
+            parent = parent.parent
+        return parent
+
+    return None
+    
+
+
+    
+
 def test_in_order_successor():
     bst = BinarySearchTree()
     bst.insert(20)
@@ -30,18 +55,21 @@ def test_in_order_successor():
     bst.insert(14)
 
     # Test all nodes
+    funcs = [in_order_successor,my_sol]
     inputs = [5, 9, 11, 12, 14, 20, 25]
     outputs = inputs[1:]
     outputs.append(None)
 
-    for x, y in zip(inputs, outputs):
-        test = bst.get_node(x)
-        succ = in_order_successor(test)
-        if succ is not None:
-            assert succ.key == y
-        else:
-            assert succ == y
+    for f in funcs:
+        for x, y in zip(inputs, outputs):
+            test = bst.get_node(x)
+            succ = f(test)
+            if succ is not None:
+                assert succ.key == y
+            else:
+                assert succ == y
 
 
 if __name__ == "__main__":
     test_in_order_successor()
+    print("Done")
